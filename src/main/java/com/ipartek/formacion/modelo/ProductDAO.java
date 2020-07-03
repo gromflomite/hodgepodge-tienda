@@ -24,8 +24,8 @@ public class ProductDAO {
 
 	ArrayList<Producto> dbRegisters = new ArrayList<Producto>();
 	
-	String sqlQuery = " SELECT id, nombre, precio FROM productos ORDER by id DESC LIMIT 10; ";
-
+	String sqlQuery = " SELECT p.id AS 'producto_id', p.nombre AS 'producto_nombre', p.precio, p.descripcion, p.fk_fabricante, f.id AS 'fabricante_id', f.nombre AS 'fabricante_nombre' FROM productos AS p, fabricantes AS f WHERE p.fk_fabricante = f.id ORDER by p.id DESC LIMIT 10; ";
+	
 	try (
 		Connection dBconnection = ConnectionManager.getConnection(); 
 		PreparedStatement pst = dBconnection.prepareStatement(sqlQuery);) {
@@ -33,17 +33,25 @@ public class ProductDAO {
 	    try (ResultSet dbResultSet = pst.executeQuery()) {
 
 		Producto producto;
+		Fabricante fabricante;
 
 		while (dbResultSet.next()) {
 
 		    producto = new Producto();
 
-		    producto.setId	(dbResultSet.getInt("id"));
-		    producto.setNombre	(dbResultSet.getString("nombre"));
-		    producto.setPrecio	(dbResultSet.getFloat("precio"));
+		    producto.setId		(dbResultSet.getInt("producto_id"));
+		    producto.setNombre		(dbResultSet.getString("producto_nombre"));
+		    producto.setPrecio		(dbResultSet.getFloat("precio"));
+		    producto.setDescripcion	(dbResultSet.getString("descripcion"));
+		    
+		    fabricante = new Fabricante();
+		    
+		    fabricante.setId		(dbResultSet.getInt("fabricante_id"));
+		    fabricante.setNombre	(dbResultSet.getString("fabricante_nombre"));
+		    
+		    producto.setFabricante(fabricante);		    		    
 
 		    dbRegisters.add(producto);
-
 		}
 
 	    }
