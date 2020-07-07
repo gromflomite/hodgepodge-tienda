@@ -21,10 +21,17 @@ public class HomeController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+	String productName	= request.getParameter("productName");
+	String maxPrice		= request.getParameter("maxPrice");
+	String minPrice 	= request.getParameter("minPrice");
+	String manufId		= request.getParameter("manufId");	
+	
 	ArrayList<Producto> productos = new ArrayList<Producto>();
 
-	try {
+	try {	    
+	    
 	    productos = productoDao.buscar("", 0, 0, 0);
+	    
 
 	} catch (Exception e) {
 	    // TODO: handle exception
